@@ -1,11 +1,13 @@
 # cadastro-de-pessoa
 
-> I only know you got the wrong man.
-> - Sam Lowry
-> Information Transit got the wrong man. I got the *right* man. The wrong one was delivered to me as the right man, I accepted him on good faith as the right man. Was I wrong?
-> - Jack Lint - Brazil (1985)
+> There you are, your own number on your very own door. And behind that door,
+> your very own office! Welcome to the team, DZ-015
 
-The validation formula for cpf (Cadastro de Pessoa Física) and cnpj (Cadastro Nacional de Pessoa Jurídica).
+> - Mr. Warrenn (Brazil 1985)
+
+An implementation of the validation formula for
+cpf (Cadastro de Pessoa Física) and cnpj (Cadastro Nacional de Pessoa Jurídica),
+the unique codes for people and companies in Brazil.
 
 # Usage
 
@@ -18,7 +20,6 @@ The API consists of 6 functions in these two namespaces.
 ```
 
 Validates using the formula
-Only cares about the numbers in a string
 
 ```clojure
 (cpf/valid? [2 2 1 8 3 5 1 3 1 5 2])

@@ -11,6 +11,8 @@ the unique codes for people and companies in Brazil.
 
 # Usage
 
+Dependency info `[cadastro-de-pessoa "0.1.1"]`
+
 The API consists of 6 functions in these two namespaces.
 
 ```clojure

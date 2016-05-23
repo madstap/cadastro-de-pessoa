@@ -28,5 +28,6 @@
 (defn format
   "Returns a string of the correctly formatted cpf"
   [cpf]
-  (let [[a b c d e f g h i j k] (:full (shared/parse cpf))]
+  (let [[a b c d e f g h i j k :as full] (:full (shared/parse cpf))]
+    (assert (= length (count full)))
     (str a b c "." d e f "." g h i "-" j k)))

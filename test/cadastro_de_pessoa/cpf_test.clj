@@ -37,5 +37,12 @@
       "66666666666")))
 
 (deftest format-test
-  (is (= (cpf/format (concat (range 10) [0])) "012.345.678-90"))
-  (is (= (cpf/format "27.060.4873-15") "270.604.873-15")))
+  (testing "formats right"
+    (is (= (cpf/format (concat (range 10) [0])) "012.345.678-90"))
+    (is (= (cpf/format "27.060.4873-15") "270.604.873-15")))
+
+  (testing "trying to format an incorrect number of digits throws an error"
+    (are [xs] (thrown? AssertionError (cpf/format xs))
+      (range 20)
+      "123.123.123-12123"
+      "123.123.123")))

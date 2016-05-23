@@ -35,5 +35,12 @@
       "48.741.030/000185")))
 
 (deftest format-test
-  (is (= (cnpj/format (concat (range 10) (range 4))) "01.234.567/8901-23"))
-  (is (= (cnpj/format "75-887-562x0001xxx60") "75.887.562/0001-60")))
+  (testing "formats right"
+    (is (= (cnpj/format (concat (range 10) (range 4))) "01.234.567/8901-23"))
+    (is (= (cnpj/format "75-887-562x0001xxx60") "75.887.562/0001-60")))
+
+  (testing "trying to format an incorrect number of digits throws an error"
+    (are [xs] (thrown? AssertionError (cnpj/format xs))
+      (range 20)
+      "75.887.562/0001-6012"
+      "75.887.562/0001")))

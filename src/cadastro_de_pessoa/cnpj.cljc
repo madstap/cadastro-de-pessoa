@@ -4,6 +4,10 @@
 
 (def length 14)
 
+;; Seems like the only edge case with cnpj is repeated 0s
+(def ^:private invalid-cnpjs
+  #{(repeat length 0)})
+
 (defn valid?
   "Takes a cnpj as a string or seq of digits. Only cares about digits if string.
   Returns true if valid, else false."
@@ -12,6 +16,7 @@
         mask1   [5 4 3 2 9 8 7 6 5 4 3 2]
         mask2 [6 5 4 3 2 9 8 7 6 5 4 3 2]]
     (and (= length (count full))
+         (not (invalid-cnpjs full))
          (= control (shared/control-digits mask1 mask2 digits)))))
 
 (defn formatted?

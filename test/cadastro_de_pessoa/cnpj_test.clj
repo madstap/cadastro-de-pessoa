@@ -17,7 +17,8 @@
       "46.303.783/0001-33"
       "48.741.230/0001-85"
       "75.887.562/0001-60"
-      [4 5 3 0 3 7 8 3 0 0 0 1 8 3])))
+      [4 5 3 0 3 7 8 3 0 0 0 1 8 3]
+      (repeat cnpj/length 0))))
 
 (deftest formatted?-test
   (testing "formatted right"

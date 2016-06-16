@@ -31,3 +31,17 @@
   (let [[a b c d e f g h i j k l m n :as full] (:full (shared/parse cnpj))]
     (assert (= length (count full)))
     (str a b "." c d e "." f g h "/" i j k l "-" m n)))
+
+(defn random
+  "Returns a random valid cnpj."
+  ([]
+   (format (shared/invoke-until-true! valid? #(shared/rand-digits length))))
+  ([n]
+   {:pre [(< -1 n 10e3) (== n (int n))]}
+   (let [pad-digits (fn [digits]
+                      (concat (repeat (- 4 (count digits)) 0) digits))
+         digits (pad-digits (shared/str->digits (str (int (float n)))))]
+     (format (shared/invoke-until-true! valid?
+                                        #(concat (shared/rand-digits 8)
+                                                 digits
+                                                 (shared/rand-digits 2)))))))

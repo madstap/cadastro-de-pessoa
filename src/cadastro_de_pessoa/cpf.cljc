@@ -31,3 +31,8 @@
   (let [[a b c d e f g h i j k :as full] (:full (shared/parse cpf))]
     (assert (= length (count full)))
     (str a b c "." d e f "." g h i "-" j k)))
+
+(defn random
+  "Returns a random valid cpf"
+  []
+  (format (shared/invoke-until-true! valid? #(shared/rand-digits length))))

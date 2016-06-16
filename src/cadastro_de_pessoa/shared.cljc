@@ -1,5 +1,7 @@
 (ns cadastro-de-pessoa.shared)
 
+;;; Parsing helpers
+
 (defn str->digits
   "Takes a string and returns a seq of the digits it contains,
   ignores other characters"
@@ -14,6 +16,22 @@
   (let [full (if (string? code) (str->digits code) code)
         [digits control] (split-at (- (count full) 2) full)]
     {:digits digits :control control :full full}))
+
+;;; Random helpers
+
+(defn invoke-until-true!
+  "Keeps invoking (f) until (pred (f)) is true, then returns that value.
+  The ! means beware of infinite loops,
+  there has to be a reasonable chance of (pred (f)) being true."
+  [pred f]
+  (loop []
+    (let [x (f)]
+      (if (pred x) x (recur)))))
+
+(defn rand-digits
+  "Returns a seq of n random digits."
+  [n]
+  (repeatedly n #(rand-int 10)))
 
 ;;; The formula
 

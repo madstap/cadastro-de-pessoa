@@ -33,14 +33,15 @@
     (str a b "." c d e "." f g h "/" i j k l "-" m n)))
 
 (defn random
-  "Returns a random valid cnpj."
+  "Returns a random valid cnpj.
+  An integer argument can be given to choose a branch. (Matriz ou filial)."
   ([]
    (format (shared/invoke-until-true! valid? #(shared/rand-digits length))))
-  ([n]
-   {:pre [(< -1 n 10e3) (== n (int n))]}
+  ([branch]
+   {:pre [(< -1 branch 10e3) (== branch (int branch))]}
    (let [pad-digits (fn [digits]
                       (concat (repeat (- 4 (count digits)) 0) digits))
-         digits (pad-digits (shared/str->digits (str (int (float n)))))]
+         digits (pad-digits (shared/str->digits (str (int (float branch)))))]
      (format (shared/invoke-until-true! valid?
                                         #(concat (shared/rand-digits 8)
                                                  digits

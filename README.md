@@ -14,8 +14,6 @@ the unique codes for people and companies in Brazil.
 [![Clojars Project] (https://img.shields.io/clojars/v/cadastro-de-pessoa.svg)]
 (https://clojars.org/cadastro-de-pessoa)
 
-The API consists of 6 functions in these two namespaces.
-
 ```clojure
 (ns example.core
   (:require [cadastro-de-pessoa.cpf  :as cpf]
@@ -41,6 +39,16 @@ Formats a cpf or cnpj correctly
 ```clojure
 (cpf/format [2 2 1 8 3 5 1 3 1 5 2]) ;=> "221.835.131-52"
 (cnpj/format "27865xxx757xxx000xxx102") ;=> "27.865.757/0001-02"
+```
+
+Generates a random, valid cpf or cnpj
+
+```clojure
+(cpf/random) ;=> "343.696.318-66"
+
+(cnpj/random)   ;=> "02.583.753/5448-95"
+(cnpj/random 1) ;=> "24.275.606/0001-06"
+
 ```
 
 ```clojure

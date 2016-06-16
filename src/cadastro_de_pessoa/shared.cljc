@@ -7,7 +7,7 @@
   (map #?(:clj #(Integer/parseInt %), :cljs js/parseInt) (re-seq #"[0-9]" (str s))))
 
 (defn parse
-  "Parses a cpf or cnpj string. Ignores any character that are not digits.
+  "Parses a cpf or cnpj string. Ignores characters that are not digits.
   Also accepts a seq of digits.
   Returns a map of :digits, :control and :full."
   [code]

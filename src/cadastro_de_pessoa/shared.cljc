@@ -1,5 +1,20 @@
 (ns cadastro-de-pessoa.shared)
 
+;;; Utils
+
+
+(defn insert-indexed
+  "Takes a map of indices to things and inserts the things at the indices of coll,
+   not replacing the element that's already there."
+  ([index->x coll]
+   {:pre [(map? index->x)]}
+   (reduce-kv (fn [acc i x]
+                (if-let [item (index->x i)]
+                  (conj acc item x)
+                  (conj acc x)))
+              []
+              (vec coll))))
+
 ;;; Parsing helpers
 
 (defn str->digits

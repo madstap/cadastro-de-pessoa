@@ -28,9 +28,8 @@
 (defn format
   "Returns a string of the correctly formatted cnpj"
   [cnpj]
-  (let [[a b c d e f g h i j k l m n :as full] (:full (shared/parse cnpj))]
-    (assert (= length (count full)))
-    (str a b "." c d e "." f g h "/" i j k l "-" m n)))
+  (apply str (shared/insert-indexed {2 ".", 5 ".", 8 "/", 12 "-"}
+                                    (take length (shared/parse cnpj)))))
 
 (defn random
   "Returns a random valid cnpj.

@@ -44,10 +44,10 @@ Formats a cpf or cnpj correctly
 Generates a random, valid cpf or cnpj
 
 ```clojure
-(cpf/random) ;=> "343.696.318-66"
+(cpf/gen) ;=> "343.696.318-66"
 
-(cnpj/random)   ;=> "02.583.753/5448-95"
-(cnpj/random 1) ;=> "24.275.606/0001-06"
+(cnpj/gen)   ;=> "02.583.753/5448-95"
+(cnpj/gen 1) ;=> "24.275.606/0001-06"
 
 ```
 

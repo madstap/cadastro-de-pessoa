@@ -46,3 +46,12 @@
 
   (testing "too long cnpj"
     (is (= (cnpj/format "1234567890123456") "12.345.678/9012-34"))))
+
+(deftest gen-test
+  (testing "generating a cnpj with branch number"
+    (are [branch-int branch-str] (= branch-str
+                                    (second (re-find #"/([0-9]{4})-" (cnpj/gen branch-int))))
+      1 "0001"
+      5 "0005"
+      120 "0120"
+      9999 "9999")))

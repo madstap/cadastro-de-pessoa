@@ -12,11 +12,12 @@
   "Takes a cnpj as a string or seq of digits. Only cares about digits if string.
   Returns true if valid, else false."
   [cnpj]
-  (let [{:keys [digits control full]} (shared/parse cnpj)
+  (let [cnpj (shared/parse cnpj)
+        [digits control] (shared/split-control cnpj)
         mask1   [5 4 3 2 9 8 7 6 5 4 3 2]
         mask2 [6 5 4 3 2 9 8 7 6 5 4 3 2]]
-    (and (= length (count full))
-         (not (invalid-cnpjs full))
+    (and (= length (count cnpj))
+         (not (invalid-cnpjs cnpj))
          (= control (shared/control-digits mask1 mask2 digits)))))
 
 (defn formatted?

@@ -13,9 +13,10 @@
   "Takes a string or seq of digits. Any characters that are not digits are ignored.
   Returns true if valid, else false"
   [cpf]
-  (let [{:keys [digits control full]} (shared/parse cpf)]
-    (and (= length (count full))
-         (not (invalid-cpfs full))
+  (let [cpf (shared/parse cpf)
+        [digits control] (shared/split-control cpf)]
+    (and (= length (count cpf))
+         (not (invalid-cpfs cpf))
          (= control (shared/control-digits (range 10 1 -1)
                                            (range 11 1 -1) digits)))))
 

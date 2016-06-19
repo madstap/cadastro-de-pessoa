@@ -2,12 +2,9 @@
 
 ;;; Utils
 
-
 (defn insert-indexed
-  "Takes a map of indices to things and inserts the things at the indices of coll,
-   not replacing the element that's already there."
+  "Takes a map of indices to things and inserts the things at those indices of coll."
   ([index->x coll]
-   {:pre [(map? index->x)]}
    (reduce-kv (fn [acc i x]
                 (if-let [item (index->x i)]
                   (conj acc item x)
@@ -24,13 +21,14 @@
   (map #?(:clj #(Integer/parseInt %), :cljs js/parseInt) (re-seq #"[0-9]" (str s))))
 
 (defn parse
-  "Parses a cpf or cnpj string. Ignores characters that are not digits.
-  Also accepts a seq of digits.
-  Returns a map of :digits, :control and :full."
   [code]
-  (let [full (if (string? code) (str->digits code) code)
-        [digits control] (split-at (- (count full) 2) full)]
-    {:digits digits :control control :full full}))
+  (if (string? code) (str->digits code) code))
+
+(defn split-control
+  "Returns a tuple of [code control-digits],
+  where control-digits are the last 2 digits."
+  [coll]
+  (split-at (- (count coll) 2) coll))
 
 ;;; Random helpers
 

@@ -15,13 +15,13 @@
 ;;; Parsing helpers
 
 (defn str->digits
-  "Takes a string and returns a seq of the digits it contains,
-  ignores other characters"
+  "Takes a string and returns a vector of the digits it contains, ignoring other characters"
   [s]
-  (map #?(:clj #(Integer/parseInt %), :cljs js/parseInt) (re-seq #"[0-9]" (str s))))
+  (mapv #?(:clj #(Integer/parseInt %), :cljs js/parseInt) (re-seq #"[0-9]" (str s))))
 
 (defn parse
   [code]
+  {:pre [(or (string? code) (sequential? code))]}
   (if (string? code) (str->digits code) code))
 
 (defn split-control

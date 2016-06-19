@@ -39,4 +39,12 @@
 (deftest format-test
   (testing "formats right"
     (is (= (cpf/format (concat (range 10) [0])) "012.345.678-90"))
-    (is (= (cpf/format "27.060.4873-15") "270.604.873-15"))))
+    (is (= (cpf/format "27.060.4873-15") "270.604.873-15")))
+
+  (testing "incomplete cpf"
+    (is (= (cpf/format "1234") "123.4"))
+    (is (= (cpf/format "123456789") "123.456.789"))
+    (is (= (cpf/format "1234567890") "123.456.789-0")))
+
+  (testing "too long cpf"
+    (is (= (cpf/format "1234567890123456") "123.456.789-01"))))

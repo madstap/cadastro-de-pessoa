@@ -38,4 +38,11 @@
 (deftest format-test
   (testing "formats right"
     (is (= (cnpj/format (concat (range 10) (range 4))) "01.234.567/8901-23"))
-    (is (= (cnpj/format "75-887-562x0001xxx60") "75.887.562/0001-60"))))
+    (is (= (cnpj/format "75-887-562x0001xxx60") "75.887.562/0001-60")))
+
+  (testing "incomplete cnpj"
+    (is (= (cnpj/format "123") "12.3"))
+    (is (= (cnpj/format "123456789") "12.345.678/9")))
+
+  (testing "too long cnpj"
+    (is (= (cnpj/format "1234567890123456") "12.345.678/9012-34"))))

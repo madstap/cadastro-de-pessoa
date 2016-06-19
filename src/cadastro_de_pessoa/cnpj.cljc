@@ -38,7 +38,7 @@
   ([]
    (format (shared/invoke-until-true! valid? #(shared/rand-digits length))))
   ([branch]
-   {:pre [(< -1 branch 10e3) (== branch (int branch))]}
+   {:pre [(< -1 branch 10e3) (integer? branch)]}
    (let [pad-digits (fn [digits]
                       (concat (repeat (- 4 (count digits)) 0) digits))
          digits (pad-digits (shared/digits branch))]

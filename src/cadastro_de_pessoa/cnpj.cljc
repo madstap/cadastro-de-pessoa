@@ -32,9 +32,10 @@
   (apply str (shared/insert-indexed {2 ".", 5 ".", 8 "/", 12 "-"}
                                     (take length (shared/parse cnpj)))))
 
-(defn random
-  "Returns a random valid cnpj.
-  An integer argument can be given to choose a branch. (Matriz ou filial)."
+(defn gen
+  "Generates a random valid cnpj.
+  An integer argument can be given to choose headquarters or a branch. (Matriz ou filial)
+  In a cnpj xx.xxx.xxx/0001-xx, 0001 is the branch number, in this case headquarters."
   ([]
    (format (shared/invoke-until-true! valid? #(shared/rand-digits length))))
   ([branch]

@@ -31,7 +31,7 @@
   [cpf]
   (apply str (shared/insert-indexed {3 ".", 6 ".", 9 "-"} (take length (shared/parse cpf)))))
 
-(defn random
-  "Returns a random valid cpf"
+(defn gen
+  "Generates a random valid cpf"
   []
   (format (shared/invoke-until-true! valid? #(shared/rand-digits length))))

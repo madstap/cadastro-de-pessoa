@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
 ## [Unreleased]
+
+## [0.2.0] - 2016-06-19
 ### Breaking changes
 - Rename cpf/random and cnpj/random to cpf/gen and cnpj/gen
 

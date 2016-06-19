@@ -41,7 +41,7 @@
    {:pre [(< -1 branch 10e3) (== branch (int branch))]}
    (let [pad-digits (fn [digits]
                       (concat (repeat (- 4 (count digits)) 0) digits))
-         digits (pad-digits (shared/str->digits (str (int (float branch)))))]
+         digits (pad-digits (shared/digits branch))]
      (format (shared/invoke-until-true! valid?
                                         #(concat (shared/rand-digits 8)
                                                  digits

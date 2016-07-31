@@ -4,21 +4,25 @@
 
 (def length 14)
 
-;; Seems like the only edge case with cnpj is repeated 0s
-(def ^:private invalid-cnpjs
-  #{(repeat length 0)})
+(def ^:private mask1   [5 4 3 2 9 8 7 6 5 4 3 2])
+(def ^:private mask2 [6 5 4 3 2 9 8 7 6 5 4 3 2])
+
+(def repeated
+  "A set of cnpjs with repeated digits that are
+  considered valid by the algorithm, but normally shouldn't count as valid."
+  (set (for [i (range 10)
+             :let [xs (repeat (- length 2) i)]]
+         (concat xs (shared/control-digits mask1 mask2 xs)))))
 
 (defn valid?
-  "Takes a cnpj as a string or seq of digits. Only cares about digits if string.
-  Returns true if valid, else false."
-  [cnpj]
-  (let [cnpj (shared/parse cnpj)
-        [digits control] (shared/split-control cnpj)
-        mask1   [5 4 3 2 9 8 7 6 5 4 3 2]
-        mask2 [6 5 4 3 2 9 8 7 6 5 4 3 2]]
-    (and (= length (count cnpj))
-         (not (invalid-cnpjs cnpj))
-         (= control (shared/control-digits mask1 mask2 digits)))))
+  "Takes a string or seq of digits. Returns true if valid, else false."
+  ([cnpj] (valid? cnpj {}))
+  ([cnpj {:keys [accept-repeated?] :or {accept-repeated? false} :as opts}]
+   (let [cnpj (shared/parse cnpj)
+         [digits control] (shared/split-control cnpj)]
+     (and (= length (count cnpj))
+          (or accept-repeated? (not (repeated cnpj)))
+          (= control (shared/control-digits mask1 mask2 digits))))))
 
 (defn formatted?
   "Is the cnpj formatted correctly?"
@@ -29,8 +33,7 @@
 (defn format
   "Returns a string of the correctly formatted cnpj"
   [cnpj]
-  (apply str (shared/insert-indexed {2 ".", 5 ".", 8 "/", 12 "-"}
-                                    (take length (shared/parse cnpj)))))
+  (shared/format length {2 ".", 5 ".", 8 "/", 12 "-"} cnpj))
 
 (defn gen
   "Generates a random valid cnpj.
@@ -39,10 +42,8 @@
   ([]
    (format (shared/invoke-until-true! valid? #(shared/rand-digits length))))
   ([branch]
-   {:pre [(< -1 branch 10e3) (integer? branch)]}
-   (let [pad-digits (fn [digits]
-                      (concat (repeat (- 4 (count digits)) 0) digits))
-         digits (pad-digits (shared/digits branch))]
+   {:pre [(< 0 branch 10e3) (integer? branch)]}
+   (let [digits (shared/left-pad 4 0 (shared/digits branch))]
      (format (shared/invoke-until-true! valid?
                                         #(concat (shared/rand-digits 8)
                                                  digits

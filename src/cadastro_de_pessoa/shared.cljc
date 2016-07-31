@@ -1,9 +1,14 @@
-(ns cadastro-de-pessoa.shared)
+(ns cadastro-de-pessoa.shared
+  (:refer-clojure :exclude [format]))
 
 ;;; Utils
 
+(defn left-pad [n pad xs]
+  (concat (repeat (- n (count xs)) pad) xs))
+
 (defn insert-indexed
-  "Takes a map of indices to things and inserts the things at those indices of coll."
+  "Takes a map of indices to things
+  and inserts the things at those indices of coll."
   ([index->x coll]
    (reduce-kv (fn [acc i x]
                 (if-let [item (index->x i)]
@@ -15,9 +20,11 @@
 ;;; Parsing helpers
 
 (defn digits
-  "Takes a string or number, returns a vector of the digits it contains, ignoring other characters"
+  "Takes a string or number, returns a vector of the digits it contains,
+  ignoring other characters"
   [s]
-  (mapv #?(:clj #(Integer/parseInt %), :cljs js/parseInt) (re-seq #"[0-9]" (str s))))
+  (mapv #?(:cljs js/parseInt
+           :clj #(Integer/parseInt %)) (re-seq #"[0-9]" (str s))))
 
 (defn parse
   [code]
@@ -29,6 +36,13 @@
   where control-digits are the last 2 digits."
   [coll]
   (split-at (- (count coll) 2) coll))
+
+(defn format
+  [length index->x code]
+  (->> (parse code)
+       (take length)
+       (insert-indexed index->x)
+       (apply str)))
 
 ;;; Random helpers
 

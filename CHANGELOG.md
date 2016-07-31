@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
 ## [Unreleased]
+### Changes
+- Add options map arity to cnpj/- and cpf/valid? with :accept-repeated? option so you can choose to accept repeated digits as valid.
 
 ## [0.2.0] - 2016-06-19
 ### Breaking changes

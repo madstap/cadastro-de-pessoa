@@ -45,6 +45,8 @@
   (digits [this]
     (digits cpf)))
 
+(def cpf? (partial instance? CPF))
+
 (defn new-cpf
   [cpf]
   {:pre [(valid? cpf)]}

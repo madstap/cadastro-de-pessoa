@@ -2,8 +2,14 @@
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
 ## [Unreleased]
+
+## [0.3.0] - 2016-08-??
+### Breaking changes
+- Add types CPF and CNPJ with tagged literals. Include data_readers.cljc.
+- gen now returns literal.
+
 ### Changes
-- Add options map arity to cnpj/- and cpf/valid? with :accept-repeated? option so you can choose to accept repeated digits as valid.
+- Add dynamic var repeated-digits-valid? to control the behavior of cnpj/- and cpf/valid?.
 
 ## [0.2.0] - 2016-06-19
 ### Breaking changes

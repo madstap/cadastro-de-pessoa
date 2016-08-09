@@ -3,7 +3,6 @@
   (:require [cadastro-de-pessoa.shared :as shared :refer [digits]])
   (:import [cadastro_de_pessoa.shared Digits]))
 
-
 (def ^:dynamic *repeated-digits-valid?* false)
 
 (def length 14)
@@ -48,6 +47,8 @@
   Digits
   (digits [this]
     (digits cnpj)))
+
+(def cnpj? (partial instance? CNPJ))
 
 (defn new-cnpj
   "Coerce to a cnpj"

@@ -20,34 +20,51 @@ the unique codes for people and companies in Brazil.
             [cadastro-de-pessoa.cnpj :as cnpj]))
 ```
 
-Validates using the formula
+cadastro-de-pessoa defines the records CPF and CNPJ with corresponding:
+
+* constructors (`cpf/new-cpf` and `cnpj/new-cnpj`)
+* and literals (`#br/cpf "112.915.787-30"` and `#br/cnpj "63.883.794/0001-07"`)
+
+The constructors will throw an exception when
+given an invalid cpf or cnpj as input.
+
+### API
+
+Validate using the formula
 
 ```clojure
 (cpf/valid? [2 2 1 8 3 5 1 3 1 5 2])
 (cnpj/valid? "27.865.757/0001-02")
 ```
 
-Checks formatting
+Check type
+
+```clojure
+(cpf/cpf? #br/cpf "112.915.787-30") ;=> true
+(cnpj/cnpj? #br/cpf "112.915.787-30") ;=> false
+```
+
+Check formatting
 
 ```clojure
 (cpf/formatted? "221.83.51.31.52") ;=> false
 (cnpj/formatted? "27.865.757/0001-02") ;=> true
 ```
 
-Formats a cpf or cnpj correctly
+Format a cpf or cnpj correctly
 
 ```clojure
 (cpf/format [2 2 1 8 3 5 1 3 1 5 2]) ;=> "221.835.131-52"
 (cnpj/format "27865xxx757xxx000xxx102") ;=> "27.865.757/0001-02"
 ```
 
-Generates a random, valid cpf or cnpj
+Generate a random, valid cpf or cnpj
 
 ```clojure
-(cpf/gen) ;=> "343.696.318-66"
+(cpf/gen) ;=> #br/cpf "343.696.318-66"
 
-(cnpj/gen)   ;=> "02.583.753/5448-95"
-(cnpj/gen 1) ;=> "24.275.606/0001-06"
+(cnpj/gen)   ;=> #br/cnpj "02.583.753/5448-95"
+(cnpj/gen 1) ;=> #br/cnpj "24.275.606/0001-06"
 
 ```
 

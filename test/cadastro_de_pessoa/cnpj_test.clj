@@ -50,7 +50,8 @@
 (deftest gen-test
   (testing "generating a cnpj with branch number"
     (are [branch-int branch-str] (= branch-str
-                                    (second (re-find #"/([0-9]{4})-" (cnpj/gen branch-int))))
+                                    (second (re-find #"/([0-9]{4})-"
+                                                     (str (cnpj/gen branch-int)))))
       1 "0001"
       5 "0005"
       120 "0120"

@@ -1,6 +1,8 @@
 (ns cadastro-de-pessoa.cnpj
   (:refer-clojure :exclude [format])
-  (:require [cadastro-de-pessoa.shared :as shared]))
+  (:require [cadastro-de-pessoa.shared :as shared :refer [digits]])
+  (:import [cadastro_de_pessoa.shared Digits]))
+
 
 (def ^:dynamic *repeated-digits-valid?* false)
 
@@ -40,6 +42,31 @@
   [cnpj]
   (shared/format length {2 ".", 5 ".", 8 "/", 12 "-"} cnpj))
 
+(defrecord CNPJ [cnpj]
+  Object
+  (toString [this] cnpj)
+  Digits
+  (digits [this]
+    (digits cnpj)))
+
+(defn new-cnpj
+  "Coerce to a cnpj"
+  [cnpj]
+  {:pre [(valid? cnpj)]}
+  (-> cnpj shared/parse format ->CNPJ))
+
+(defn cnpj-reader [cnpj]
+  {:pre [(string? cnpj) (formatted? cnpj)]}
+  (new-cnpj cnpj))
+
+(defn cnpj-str [cnpj]
+  (str "#br/cnpj \"" cnpj "\""))
+
+(defmethod print-method CNPJ [cnpj ^java.io.Writer w]
+  (.write w (cnpj-str cnpj)))
+
+(defmethod print-dup CNPJ [cnpj] (print-method cnpj))
+
 (defn gen
   "Generates a random valid cnpj.
   An integer argument can be given to choose headquarters or a branch.
@@ -47,12 +74,13 @@
   In a cnpj xx.xxx.xxx/0001-xx, 0001 is the branch number,
   in this case headquarters."
   ([]
-   (format (shared/generate-valid valid? #(shared/rand-digits length))))
+   (new-cnpj (shared/generate-valid valid? #(shared/rand-digits length))))
   ([branch]
    {:pre [(< 0 branch 10e3) (integer? branch)]}
    (let [digits (shared/left-pad 4 0 (shared/digits branch))]
-     (format (shared/generate-valid valid?
-                                    #(concat (shared/rand-digits 8)
-                                             digits
-                                             (shared/rand-digits 2)))))))
+     (new-cnpj (shared/generate-valid valid?
+                                      #(concat (shared/rand-digits 8)
+                                               digits
+                                               (shared/rand-digits 2)))))))
+
 

@@ -1,10 +1,14 @@
 (ns cadastro-de-pessoa.cpf
   (:refer-clojure :exclude [format])
-  (:require [cadastro-de-pessoa.shared :as shared]))
+  (:require [cadastro-de-pessoa.shared :as shared :refer [digits]])
+  (:import [cadastro_de_pessoa.shared Digits]))
 
 (def ^:dynamic *repeated-digits-valid?* false)
 
 (def length 11)
+
+(def control-digits
+  (partial shared/control-digits (range 10 1 -1) (range 11 1 -1)))
 
 (def repeated
   "A set of cpfs with repeated digits that are
@@ -34,8 +38,32 @@
   [cpf]
   (shared/format length {3 ".", 6 ".", 9 "-"} cpf))
 
+(defrecord CPF [cpf]
+  Object
+  (toString [this] cpf)
+  Digits
+  (digits [this]
+    (digits cpf)))
+
+(defn new-cpf
+  [cpf]
+  {:pre [(valid? cpf)]}
+  (->> cpf shared/parse format ->CPF))
+
+(defn cpf-reader [cpf]
+  {:pre [(string? cpf) (formatted? cpf)]}
+  (new-cpf cpf))
+
+(defn cpf-str [cpf]
+  (str "#br/cpf \"" (:cpf cpf) "\""))
+
+(defmethod print-method CPF [cpf ^java.io.Writer w]
+  (.write w (cpf-str cpf)))
+
+(defmethod print-dup CPF [cpf] (print-method cpf))
+
 (defn gen
   "Generates a random valid cpf"
   []
-  (format (shared/generate-valid valid? #(shared/rand-digits length))))
+  (new-cpf (shared/generate-valid valid? #(shared/rand-digits length))))
 

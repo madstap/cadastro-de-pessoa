@@ -46,10 +46,8 @@
 
 ;;; Random helpers
 
-(defn invoke-until-true!
-  "Keeps invoking (f) until (pred (f)) is true, then returns that value.
-  The ! means beware of infinite loops,
-  there has to be a reasonable chance of (pred (f)) being true."
+(defn generate-valid
+  "Keeps invoking (f) until (pred (f)) is true, then returns that value."
   [pred f]
   (loop []
     (let [x (f)]

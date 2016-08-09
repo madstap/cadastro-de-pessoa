@@ -37,14 +37,17 @@
 
 (defn gen
   "Generates a random valid cnpj.
-  An integer argument can be given to choose headquarters or a branch. (Matriz ou filial)
-  In a cnpj xx.xxx.xxx/0001-xx, 0001 is the branch number, in this case headquarters."
+  An integer argument can be given to choose headquarters or a branch.
+  (Matriz ou filial)
+  In a cnpj xx.xxx.xxx/0001-xx, 0001 is the branch number,
+  in this case headquarters."
   ([]
-   (format (shared/invoke-until-true! valid? #(shared/rand-digits length))))
+   (format (shared/generate-valid valid? #(shared/rand-digits length))))
   ([branch]
    {:pre [(< 0 branch 10e3) (integer? branch)]}
    (let [digits (shared/left-pad 4 0 (shared/digits branch))]
-     (format (shared/invoke-until-true! valid?
-                                        #(concat (shared/rand-digits 8)
-                                                 digits
-                                                 (shared/rand-digits 2)))))))
+     (format (shared/generate-valid valid?
+                                    #(concat (shared/rand-digits 8)
+                                             digits
+                                             (shared/rand-digits 2)))))))
+

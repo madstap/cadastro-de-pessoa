@@ -35,4 +35,5 @@
 (defn gen
   "Generates a random valid cpf"
   []
-  (format (shared/invoke-until-true! valid? #(shared/rand-digits length))))
+  (format (shared/generate-valid valid? #(shared/rand-digits length))))
+

@@ -2,27 +2,32 @@
   (:refer-clojure :exclude [format])
   (:require [cadastro-de-pessoa.shared :as shared]))
 
+(def ^:dynamic *repeated-digits-valid?* false)
+
 (def length 14)
 
 (def ^:private mask1   [5 4 3 2 9 8 7 6 5 4 3 2])
 (def ^:private mask2 [6 5 4 3 2 9 8 7 6 5 4 3 2])
+
+(def control-digits (partial shared/control-digits mask1 mask2))
 
 (def repeated
   "A set of cnpjs with repeated digits that are
   considered valid by the algorithm, but normally shouldn't count as valid."
   (set (for [i (range 10)
              :let [xs (repeat (- length 2) i)]]
-         (concat xs (shared/control-digits mask1 mask2 xs)))))
+         (concat xs (control-digits xs)))))
 
 (defn valid?
-  "Takes a string or seq of digits. Returns true if valid, else false."
-  ([cnpj] (valid? cnpj {}))
-  ([cnpj {:keys [accept-repeated?] :or {accept-repeated? false} :as opts}]
+  "Takes a string or seq of digits. Returns true if valid, else false.
+  Does not validate formatting.
+  Depends on the dynamic var *repeated-digits-valid?* (default false)."
+  ([cnpj]
    (let [cnpj (shared/parse cnpj)
          [digits control] (shared/split-control cnpj)]
      (and (= length (count cnpj))
-          (or accept-repeated? (not (repeated cnpj)))
-          (= control (shared/control-digits mask1 mask2 digits))))))
+          (or *repeated-digits-valid?* (not (repeated cnpj)))
+          (= control (control-digits digits))))))
 
 (defn formatted?
   "Is the cnpj formatted correctly?"

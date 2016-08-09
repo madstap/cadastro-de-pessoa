@@ -2,6 +2,8 @@
   (:refer-clojure :exclude [format])
   (:require [cadastro-de-pessoa.shared :as shared]))
 
+(def ^:dynamic *repeated-digits-valid?* false)
+
 (def length 11)
 
 (def repeated
@@ -11,15 +13,15 @@
                (repeat length i))) [0 1 2 3 4 5 6 7 8 9 0]))
 
 (defn valid?
-  "Takes a string or seq of digits. Returns true if valid, else false"
-  ([cpf] (valid? cpf {}))
-  ([cpf {:keys [accept-repeated?] :or {:accept-repeated? false} :as opts}]
+  "Takes a string or seq of digits. Returns true if valid, else false.
+  Does not validate formatting.
+  Depends on the dynamic var *repeated-digits-valid?* (default false)"
+  ([cpf]
    (let [cpf (shared/parse cpf)
          [digits control] (shared/split-control cpf)]
      (and (= length (count cpf))
-          (or accept-repeated? (not (repeated cpf)))
-          (= control (shared/control-digits (range 10 1 -1)
-                                            (range 11 1 -1) digits))))))
+          (or *repeated-digits-valid?* (not (repeated cpf)))
+          (= control (control-digits digits))))))
 
 (defn formatted?
   "Is the cpf formatted correctly?"

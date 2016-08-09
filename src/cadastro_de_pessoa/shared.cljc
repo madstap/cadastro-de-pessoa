@@ -17,14 +17,26 @@
               []
               (vec coll))))
 
+
 ;;; Parsing helpers
 
-(defn digits
-  "Takes a string or number, returns a vector of the digits it contains,
-  ignoring other characters"
-  [s]
-  (mapv #?(:cljs js/parseInt
-           :clj #(Integer/parseInt %)) (re-seq #"[0-9]" (str s))))
+(defprotocol Digits
+  (digits [this]))
+
+(extend-type #?(:clj java.lang.String, :cljs js/String)
+  Digits
+  (digits [this]
+    (mapv #?(:cljs js/parseInt
+             :clj #(Integer/parseInt %)) (re-seq #"[0-9]" this))))
+
+(extend-type #?(:clj java.lang.Long, :cljs js/Number)
+  Digits
+  (digits [this] (digits (str this))))
+
+#?(:clj
+   (extend-type clojure.lang.BigInt
+     Digits
+     (digits [this] (digits (str this)))))
 
 (defn parse
   [code]
@@ -44,6 +56,7 @@
        (insert-indexed index->x)
        (apply str)))
 
+
 ;;; Random helpers
 
 (defn generate-valid
@@ -57,6 +70,7 @@
   "Returns a seq of n random digits."
   [n]
   (repeatedly n #(rand-int 10)))
+
 
 ;;; The formula
 

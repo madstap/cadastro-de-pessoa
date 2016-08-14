@@ -22,7 +22,7 @@ the unique codes for people and companies in Brazil.
 
 cadastro-de-pessoa defines the records CPF and CNPJ with corresponding:
 
-* constructors (`cpf/new-cpf` and `cnpj/new-cnpj`)
+* constructors (`cpf/cpf` and `cnpj/cnpj`)
 * and literals (`#br/cpf "112.915.787-30"` and `#br/cnpj "63.883.794/0001-07"`)
 
 The constructors will throw an exception when

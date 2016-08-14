@@ -48,9 +48,18 @@
 (def cpf? (partial instance? CPF))
 
 (defn new-cpf
+  {:deprecated "Use cnpj/cnpj instead."}
   [cpf]
   {:pre [(valid? cpf)]}
   (->> cpf shared/parse format ->CPF))
+
+(defn cpf
+  "Coerce to a cpf, takes a seq of digits or a string.
+  Will throw in the cpf is invalid."
+  [cpf]
+  {:pre [(valid? cpf)]}
+  (->> cpf shared/parse format ->CPF))
+
 
 (defn cpf-reader [cpf]
   {:pre [(string? cpf) (formatted? cpf)]}

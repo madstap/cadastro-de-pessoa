@@ -51,10 +51,20 @@
 (def cnpj? (partial instance? CNPJ))
 
 (defn new-cnpj
-  "Coerce to a cnpj"
+  "Coerce to a cnpj. Takes a string or seq of digits and coerces to a cnpj.
+  Will throw if the cnpj is invalid according to the formula."
+  {:deprecated "Use cnpj/cnpj instead."}
   [cnpj]
   {:pre [(valid? cnpj)]}
   (-> cnpj shared/parse format ->CNPJ))
+
+(defn cnpj
+  "Coerce to a cnpj. Takes a string or seq of digits and coerces to a cnpj.
+  Will throw if the cnpj is invalid."
+  [cnpj]
+  {:pre [(valid? cnpj)]}
+  (-> cnpj shared/parse format ->CNPJ))
+
 
 (defn cnpj-reader [cnpj]
   {:pre [(string? cnpj) (formatted? cnpj)]}

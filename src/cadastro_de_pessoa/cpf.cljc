@@ -71,7 +71,7 @@
 (defmethod print-method CPF [cpf ^java.io.Writer w]
   (.write w (cpf-str cpf)))
 
-(defmethod print-dup CPF [cpf] (print-method cpf))
+(defmethod print-dup CPF [cpf w] (print-method cpf w))
 
 (defn gen
   "Generates a random valid cpf"

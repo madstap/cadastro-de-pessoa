@@ -76,7 +76,7 @@
 (defmethod print-method CNPJ [cnpj ^java.io.Writer w]
   (.write w (cnpj-str cnpj)))
 
-(defmethod print-dup CNPJ [cnpj] (print-method cnpj))
+(defmethod print-dup CNPJ [cnpj w] (print-method cnpj w))
 
 (defn gen
   "Generates a random valid cnpj.

@@ -3,8 +3,6 @@
   (:require [cadastro-de-pessoa.shared :as shared :refer [digits]])
   (:import [cadastro_de_pessoa.shared Digits]))
 
-(def ^:dynamic *repeated-digits-valid?* false)
-
 (def length 11)
 
 (def control-digits
@@ -16,16 +14,20 @@
   (conj (set (for [i (range 10)]
                (repeat length i))) [0 1 2 3 4 5 6 7 8 9 0]))
 
+(declare cpf?)
+
 (defn valid?
-  "Takes a string or seq of digits. Returns true if valid, else false.
-  Does not validate formatting.
-  Depends on the dynamic var *repeated-digits-valid?* (default false)"
+  "Takes a string, seq of digits or a cpf. Returns true if valid, else false.
+  A cpf
+  Does not validate formatting."
   ([cpf]
-   (let [cpf (shared/parse cpf)
-         [digits control] (shared/split-control cpf)]
-     (and (= length (count cpf))
-          (or *repeated-digits-valid?* (not (repeated cpf)))
-          (= control (control-digits digits))))))
+   (if (cpf? cpf)
+     true
+     (let [cpf (shared/parse cpf)
+           [digits control] (shared/split-control cpf)]
+       (and (= length (count cpf))
+            (not (repeated cpf))
+            (= control (control-digits digits)))))))
 
 (defn formatted?
   "Is the cpf formatted correctly?"
@@ -47,12 +49,6 @@
 
 (def cpf? (partial instance? CPF))
 
-(defn new-cpf
-  {:deprecated "Use cnpj/cnpj instead."}
-  [cpf]
-  {:pre [(valid? cpf)]}
-  (->> cpf shared/parse format ->CPF))
-
 (defn cpf
   "Coerce to a cpf, takes a seq of digits or a string.
   Will throw in the cpf is invalid."
@@ -60,6 +56,10 @@
   {:pre [(valid? cpf)]}
   (->> cpf shared/parse format ->CPF))
 
+;; new-cpf just wraps cpf,
+;; the indirection is to avoid name clash with function params inside this file.
+(defn- new-cpf
+  [x] (cpf x))
 
 (defn cpf-reader [cpf]
   {:pre [(string? cpf) (formatted? cpf)]}

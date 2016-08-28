@@ -3,8 +3,6 @@
   (:require [cadastro-de-pessoa.shared :as shared :refer [digits]])
   (:import [cadastro_de_pessoa.shared Digits]))
 
-(def ^:dynamic *repeated-digits-valid?* false)
-
 (def length 14)
 
 (def ^:private mask1   [5 4 3 2 9 8 7 6 5 4 3 2])
@@ -19,16 +17,19 @@
              :let [xs (repeat (- length 2) i)]]
          (concat xs (control-digits xs)))))
 
+(declare cnpj?)
+
 (defn valid?
-  "Takes a string or seq of digits. Returns true if valid, else false.
-  Does not validate formatting.
-  Depends on the dynamic var *repeated-digits-valid?* (default false)."
+  "Takes a string, seq of digits or a cnpj. Returns true if valid, else false.
+  Does not validate formatting."
   ([cnpj]
-   (let [cnpj (shared/parse cnpj)
-         [digits control] (shared/split-control cnpj)]
-     (and (= length (count cnpj))
-          (or *repeated-digits-valid?* (not (repeated cnpj)))
-          (= control (control-digits digits))))))
+   (if (cnpj? cnpj)
+     true
+     (let [cnpj (shared/parse cnpj)
+           [digits control] (shared/split-control cnpj)]
+       (and (= length (count cnpj))
+            (not (repeated cnpj))
+            (= control (control-digits digits)))))))
 
 (defn formatted?
   "Is the cnpj formatted correctly?"
@@ -50,14 +51,6 @@
 
 (def cnpj? (partial instance? CNPJ))
 
-(defn new-cnpj
-  "Coerce to a cnpj. Takes a string or seq of digits and coerces to a cnpj.
-  Will throw if the cnpj is invalid according to the formula."
-  {:deprecated "Use cnpj/cnpj instead."}
-  [cnpj]
-  {:pre [(valid? cnpj)]}
-  (-> cnpj shared/parse format ->CNPJ))
-
 (defn cnpj
   "Coerce to a cnpj. Takes a string or seq of digits and coerces to a cnpj.
   Will throw if the cnpj is invalid."
@@ -65,6 +58,10 @@
   {:pre [(valid? cnpj)]}
   (-> cnpj shared/parse format ->CNPJ))
 
+;; new-cnpj just wraps cnpj,
+;; the indirection is to avoid name clash with function params inside this file.
+(defn- new-cnpj
+  [x] (cnpj x))
 
 (defn cnpj-reader [cnpj]
   {:pre [(string? cnpj) (formatted? cnpj)]}

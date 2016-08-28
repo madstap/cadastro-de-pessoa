@@ -82,13 +82,13 @@
   In a cnpj xx.xxx.xxx/0001-xx, 0001 is the branch number,
   in this case headquarters."
   ([]
-   (new-cnpj (shared/generate-valid valid? #(shared/rand-digits length))))
+   (let [digs (shared/rand-digits (- length 2))]
+     (new-cnpj (concat digs (control-digits digs)))))
   ([branch]
    {:pre [(< 0 branch 10e3) (integer? branch)]}
-   (let [digits (shared/left-pad 4 0 (shared/digits branch))]
-     (new-cnpj (shared/generate-valid valid?
-                                      #(concat (shared/rand-digits 8)
-                                               digits
-                                               (shared/rand-digits 2)))))))
+   (let [digs (shared/rand-digits (- length 2 4))
+         branch-digs (shared/left-pad 4 0 (shared/digits branch))
+         digs' (concat digs branch-digs)]
+     (new-cnpj (concat digs' (control-digits digs'))))))
 
 

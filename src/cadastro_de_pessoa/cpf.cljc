@@ -76,5 +76,6 @@
 (defn gen
   "Generates a random valid cpf"
   []
-  (new-cpf (shared/generate-valid valid? #(shared/rand-digits length))))
+  (let [digits (shared/rand-digits (- length 2))]
+    (new-cpf (concat digits (control-digits digits)))))
 

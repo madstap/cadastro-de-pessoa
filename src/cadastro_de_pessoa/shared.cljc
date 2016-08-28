@@ -62,9 +62,8 @@
 (defn generate-valid
   "Keeps invoking (f) until (pred (f)) is true, then returns that value."
   [pred f]
-  (loop []
-    (let [x (f)]
-      (if (pred x) x (recur)))))
+  (let [x (f)]
+    (if (pred x) x (recur pred f))))
 
 (defn rand-digits
   "Returns a seq of n random digits."

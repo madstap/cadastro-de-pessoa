@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file. This change
 - gen now returns literal.
 
 ### Changes
-- Add dynamic var repeated-digits-valid? to control the behavior of cnpj/- and cpf/valid?.
+- valid? can take a literal.
 
 ## [0.2.0] - 2016-06-19
 ### Breaking changes

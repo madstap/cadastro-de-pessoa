@@ -14,6 +14,9 @@ the unique codes for people and companies in Brazil.
 [![Clojars Project] (https://img.shields.io/clojars/v/cadastro-de-pessoa.svg)]
 (https://clojars.org/cadastro-de-pessoa)
 
+Requires clojure 1.7.0 because of reader conditionals.
+Works in both clojure and clojurescript.
+
 ```clojure
 (ns example.core
   (:require [cadastro-de-pessoa.cpf  :as cpf]

@@ -1,6 +1,6 @@
 (ns cadastro-de-pessoa.cnpj
   (:refer-clojure :exclude [format])
-  (:require [cadastro-de-pessoa.shared :as shared :refer [digits #?(:cljs Digits)]])
+  (:require [cadastro-de-pessoa.shared :as shared :refer [#?(:cljs Digits)]])
   #?(:clj (:import [cadastro_de_pessoa.shared Digits])))
 
 (def length 14)
@@ -41,6 +41,8 @@
   "Returns a string of the correctly formatted cnpj"
   [cnpj]
   (shared/format length {2 ".", 5 ".", 8 "/", 12 "-"} cnpj))
+
+(def digits shared/digits)
 
 (defrecord CNPJ [cnpj]
   Object

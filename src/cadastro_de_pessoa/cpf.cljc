@@ -1,6 +1,6 @@
 (ns cadastro-de-pessoa.cpf
   (:refer-clojure :exclude [format])
-  (:require [cadastro-de-pessoa.shared :as shared :refer [digits #?(:cljs Digits)]])
+  (:require [cadastro-de-pessoa.shared :as shared :refer [#?(:cljs Digits)]])
   #?(:clj (:import [cadastro_de_pessoa.shared Digits])))
 
 (def length 11)
@@ -39,6 +39,8 @@
   "Returns a string of the correctly formatted cpf"
   [cpf]
   (shared/format length {3 ".", 6 ".", 9 "-"} cpf))
+
+(def digits shared/digits)
 
 (defrecord CPF [cpf]
   Object

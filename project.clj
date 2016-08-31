@@ -1,4 +1,4 @@
-(defproject cadastro-de-pessoa "0.3.0"
+(defproject cadastro-de-pessoa "0.3.1-SNAPSHOT"
   :description "Some utils for working with cpfs and cnpjs."
   :url "http://github.com/madstap/cadastro-de-pessoa"
   :license {:name "Eclipse Public License"

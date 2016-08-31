@@ -1,7 +1,7 @@
 (ns cadastro-de-pessoa.cnpj
   (:refer-clojure :exclude [format])
-  (:require [cadastro-de-pessoa.shared :as shared :refer [digits]])
-  (:import [cadastro_de_pessoa.shared Digits]))
+  (:require [cadastro-de-pessoa.shared :as shared :refer [digits #?(:cljs Digits)]])
+  #?(:clj (:import [cadastro_de_pessoa.shared Digits])))
 
 (def length 14)
 
@@ -90,5 +90,3 @@
          branch-digs (shared/left-pad 4 0 (shared/digits branch))
          digs' (concat digs branch-digs)]
      (new-cnpj (concat digs' (control-digits digs'))))))
-
-

@@ -17,26 +17,12 @@
               []
               (vec coll))))
 
-
 ;;; Parsing helpers
 
-(defprotocol Digits
-  (digits [this]))
-
-(extend-type #?(:clj java.lang.String, :cljs js/String)
-  Digits
-  (digits [this]
-    (mapv #?(:cljs js/parseInt
-             :clj #(Integer/parseInt %)) (re-seq #"[0-9]" this))))
-
-(extend-type #?(:clj java.lang.Long, :cljs js/Number)
-  Digits
-  (digits [this] (digits (str this))))
-
-#?(:clj
-   (extend-type clojure.lang.BigInt
-     Digits
-     (digits [this] (digits (str this)))))
+(defn digits "Returns a seq of the digits of x"
+  [x]
+  (mapv #?(:cljs js/parseInt
+           :clj #(Integer/parseInt %)) (re-seq #"[0-9]" (str x))))
 
 (defn parse
   [code]

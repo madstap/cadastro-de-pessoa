@@ -1,7 +1,6 @@
 (ns cadastro-de-pessoa.cpf
   (:refer-clojure :exclude [format])
-  (:require [cadastro-de-pessoa.shared :as shared :refer [#?(:cljs Digits)]])
-  #?(:clj (:import [cadastro_de_pessoa.shared Digits])))
+  (:require [cadastro-de-pessoa.shared :as shared]))
 
 (def length 11)
 
@@ -44,10 +43,7 @@
 
 (defrecord CPF [cpf]
   Object
-  (toString [this] cpf)
-  Digits
-  (digits [this]
-    (digits cpf)))
+  (toString [this] cpf))
 
 (def cpf? (partial instance? CPF))
 

@@ -1,6 +1,8 @@
 (ns cadastro-de-pessoa.cnpj
   (:refer-clojure :exclude [format])
-  (:require [cadastro-de-pessoa.shared :as shared]))
+  (:require
+   [cadastro-de-pessoa.shared :as shared]
+   #?(:cljs [cljs.reader :as reader])))
 
 (def length 14)
 
@@ -68,10 +70,12 @@
 (defn cnpj-str [cnpj]
   (str "#br/cnpj \"" cnpj "\""))
 
-(defmethod print-method CNPJ [cnpj ^java.io.Writer w]
-  (.write w (cnpj-str cnpj)))
+#?(:clj (defmethod print-method CNPJ [cnpj ^java.io.Writer w]
+              (.write w (cnpj-str cnpj))))
 
-(defmethod print-dup CNPJ [cnpj w] (print-method cnpj w))
+#?(:clj (defmethod print-dup CNPJ [cnpj w] (print-method cnpj w)))
+
+#?(:cljs (reader/register-tag-parser! 'br/cnpj cnpj))
 
 (defn gen
   "Generates a random valid cnpj.

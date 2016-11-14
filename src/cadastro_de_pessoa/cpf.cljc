@@ -64,16 +64,17 @@
   (new-cpf cpf))
 
 (defn cpf-str [cpf]
-  (str "#br/cpf \"" (:cpf cpf) "\""))
+  (str "#br/cpf \"" cpf "\""))
 
-(defmethod print-method CPF [cpf ^java.io.Writer w]
-  (.write w (cpf-str cpf)))
+#?(:clj (defmethod print-method CPF [cpf ^java.io.Writer w]
+              (.write w (cpf-str cpf))))
 
-(defmethod print-dup CPF [cpf w] (print-method cpf w))
+#?(:clj (defmethod print-dup CPF [cpf w] (print-method cpf w)))
+
+#?(:cljs (reader/register-tag-parser! 'br/cpf cpf))
 
 (defn gen
   "Generates a random valid cpf"
   []
   (let [digits (shared/rand-digits (- length 2))]
     (new-cpf (concat digits (control-digits digits)))))
-

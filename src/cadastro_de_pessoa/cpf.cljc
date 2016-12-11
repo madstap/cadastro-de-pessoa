@@ -1,6 +1,7 @@
 (ns cadastro-de-pessoa.cpf
   (:refer-clojure :exclude [format])
-  (:require [cadastro-de-pessoa.shared :as shared]))
+  (:require
+   [cadastro-de-pessoa.shared :as shared]))
 
 (def length 11)
 
@@ -13,27 +14,24 @@
   (conj (set (for [i (range 10)]
                (repeat length i))) [0 1 2 3 4 5 6 7 8 9 0]))
 
-(declare cpf?)
-
 (defn valid?
   "Takes a string, seq of digits or a cpf. Returns true if valid, else false.
   A cpf
   Does not validate formatting."
   ([cpf]
-   (if (cpf? cpf)
-     true
-     (let [cpf (shared/parse cpf)
-           [digits control] (shared/split-control cpf)]
-       (and (= length (count cpf))
-            (not (repeated cpf))
-            (= control (control-digits digits)))))))
+   (let [cpf (shared/parse cpf)
+         [digits control] (shared/split-control cpf)]
+     (and (= length (count cpf))
+          (not (repeated cpf))
+          (= control (control-digits digits))))))
 
 (def regex #"^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$")
 
 (defn formatted?
   "Is the cpf formatted correctly?"
   [cpf]
-  (boolean (re-find regex cpf)))
+  (boolean
+   (and (string? cpf) (re-find regex cpf))))
 
 (defn format
   "Returns a string of the correctly formatted cpf"
@@ -42,40 +40,8 @@
 
 (def digits shared/digits)
 
-(defrecord CPF [cpf]
-  Object
-  (toString [this] cpf))
-
-(def cpf? (partial instance? CPF))
-
-(defn cpf
-  "Coerce to a cpf, takes a seq of digits or a string.
-  Will throw in the cpf is invalid."
-  [cpf]
-  {:pre [(valid? cpf)]}
-  (->> cpf shared/parse format ->CPF))
-
-;; new-cpf just wraps cpf,
-;; the indirection is to avoid name clash with function params inside this file.
-(defn- new-cpf
-  [x] (cpf x))
-
-(defn cpf-reader [cpf]
-  {:pre [(string? cpf) (formatted? cpf)]}
-  (new-cpf cpf))
-
-(defn cpf-str [cpf]
-  (str "#br/cpf \"" cpf "\""))
-
-#?(:clj (defmethod print-method CPF [cpf ^java.io.Writer w]
-              (.write w (cpf-str cpf))))
-
-#?(:clj (defmethod print-dup CPF [cpf w] (print-method cpf w)))
-
-#?(:cljs (reader/register-tag-parser! 'br/cpf cpf))
-
 (defn gen
   "Generates a random valid cpf"
   []
   (let [digits (shared/rand-digits (- length 2))]
-    (new-cpf (concat digits (control-digits digits)))))
+    (format (concat digits (control-digits digits)))))

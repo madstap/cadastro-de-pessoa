@@ -11,40 +11,33 @@ the unique codes for people and companies in Brazil.
 
 # Usage
 
-[![Clojars Project] (https://img.shields.io/clojars/v/cadastro-de-pessoa.svg)]
-(https://clojars.org/cadastro-de-pessoa)
-
 Requires clojure 1.7.0 because of reader conditionals.
 Works in both clojure and clojurescript.
 
+#### Dependency
+[![Clojars Project] (https://img.shields.io/clojars/v/cadastro-de-pessoa.svg)]
+(https://clojars.org/cadastro-de-pessoa)
+
+`[cadastro-de-pessoa "0.4.0"]`
+
+#### Namespace declaration
+
 ```clojure
 (ns example.core
-  (:require [cadastro-de-pessoa.cpf  :as cpf]
-            [cadastro-de-pessoa.cnpj :as cnpj]))
+  (:require
+   [cadastro-de-pessoa.cpf  :as cpf]
+   [cadastro-de-pessoa.cnpj :as cnpj]))
 ```
 
-cadastro-de-pessoa defines the records CPF and CNPJ with corresponding:
-
-* constructors (`cpf/cpf` and `cnpj/cnpj`)
-* and literals (`#br/cpf "112.915.787-30"` and `#br/cnpj "63.883.794/0001-07"`)
-
-The constructors will throw an exception when
-given an invalid cpf or cnpj as input.
-
 ### API
+
+Functions that take a cpf/cnpj accepts either a sequence of digits or a string, while functions that return a cpf/cnpf return it as a formatted string.
 
 Validate using the formula
 
 ```clojure
 (cpf/valid? [2 2 1 8 3 5 1 3 1 5 2])
 (cnpj/valid? "27.865.757/0001-02")
-```
-
-Check type
-
-```clojure
-(cpf/cpf? #br/cpf "112.915.787-30") ;=> true
-(cnpj/cnpj? #br/cpf "112.915.787-30") ;=> false
 ```
 
 Check formatting
@@ -64,10 +57,10 @@ Format a cpf or cnpj correctly
 Generate a random, valid cpf or cnpj
 
 ```clojure
-(cpf/gen) ;=> #br/cpf "343.696.318-66"
+(cpf/gen) ;=> "343.696.318-66"
 
-(cnpj/gen)   ;=> #br/cnpj "02.583.753/5448-95"
-(cnpj/gen 1) ;=> #br/cnpj "24.275.606/0001-06"
+(cnpj/gen)   ;=> "02.583.753/5448-95"
+(cnpj/gen 1) ;=> "24.275.606/0001-06"
 
 ```
 

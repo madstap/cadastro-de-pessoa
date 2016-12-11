@@ -28,11 +28,12 @@
             (not (repeated cpf))
             (= control (control-digits digits)))))))
 
+(def regex #"^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$")
+
 (defn formatted?
   "Is the cpf formatted correctly?"
   [cpf]
-  (boolean
-   (re-find #"^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$" cpf)))
+  (boolean (re-find regex cpf)))
 
 (defn format
   "Returns a string of the correctly formatted cpf"

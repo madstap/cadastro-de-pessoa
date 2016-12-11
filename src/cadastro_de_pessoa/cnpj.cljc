@@ -32,11 +32,12 @@
             (not (repeated cnpj))
             (= control (control-digits digits)))))))
 
+(def regex #"^[0-9]{2}\.[0-9]{3}\.[0-9]{3}/[0-9]{4}-[0-9]{2}$")
+
 (defn formatted?
   "Is the cnpj formatted correctly?"
   [cnpj]
-  (boolean
-   (re-find #"^[0-9]{2}\.[0-9]{3}\.[0-9]{3}/[0-9]{4}-[0-9]{2}$" cnpj)))
+  (boolean (re-find regex cnpj)))
 
 (defn format
   "Returns a string of the correctly formatted cnpj"

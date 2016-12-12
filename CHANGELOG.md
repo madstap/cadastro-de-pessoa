@@ -1,7 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
-## [Unreleased] (0.4.0-SNAPSHOT)
+## [Unreleased]
+
+## [0.4.0] - 2016-12-11
 ### Breaking changes
 - Remove all type stuff and literals and all that. Simplify and follow the unix philosophy. This is just a couple of helper functions.
 

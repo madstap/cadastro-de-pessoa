@@ -1,5 +1,6 @@
 (ns cadastro-de-pessoa.shared
-  (:refer-clojure :exclude [format]))
+  (:refer-clojure :exclude [format])
+  (:require [clojure.string :as str]))
 
 ;;; Utils
 
@@ -23,6 +24,10 @@
   [x]
   (mapv #?(:cljs js/parseInt
            :clj #(Integer/parseInt %)) (re-seq #"[0-9]" (str x))))
+
+(defn digits-string "Returns a string of the digits of x"
+  [x]
+  (str/replace x #"[^0-9]" ""))
 
 (defn parse
   [code]
